@@ -1,4 +1,4 @@
-package com.tasz.institutionmanager.model;
+package com.tasz.institutionmanager.contract;
 
 import lombok.Data;
 
