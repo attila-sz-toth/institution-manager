@@ -1,7 +1,6 @@
-CREATE TABLE users
-  (
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255),
-    role     VARCHAR(255) NOT NULL,
-    PRIMARY KEY (username)
-  );
+CREATE TABLE institutionm.users (
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255),
+  role     VARCHAR(255) NOT NULL,
+  PRIMARY KEY (username)
+);
