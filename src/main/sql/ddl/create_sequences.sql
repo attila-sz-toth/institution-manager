@@ -1,0 +1,2 @@
+CREATE SEQUENCE seq_user_id
+  START 1;

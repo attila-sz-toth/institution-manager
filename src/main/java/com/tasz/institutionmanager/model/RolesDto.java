@@ -8,21 +8,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UsersDto {
+public class RolesDto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
     private Integer id;
 
-    private String username;
-
-    private String password;
-
     @Enumerated(EnumType.STRING)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
     private Role role;
 }
