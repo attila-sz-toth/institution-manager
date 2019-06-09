@@ -10,7 +10,7 @@ public class UsersDtoToUserConverter implements Converter<UsersDto, User> {
     public User convert(UsersDto from) {
         return User.builder()
                 .username(from.getUsername())
-                .role(from.getRole())
+                .role(from.getRole().getRole())
                 .build();
     }
 }

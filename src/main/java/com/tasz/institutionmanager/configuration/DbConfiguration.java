@@ -1,4 +1,4 @@
-package com.tasz.institutionmanager;
+package com.tasz.institutionmanager.configuration;
 
 import com.tasz.institutionmanager.model.UsersDto;
 import com.zaxxer.hikari.HikariDataSource;

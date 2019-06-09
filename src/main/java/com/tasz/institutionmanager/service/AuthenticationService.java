@@ -1,14 +1,13 @@
 package com.tasz.institutionmanager.service;
 
+import com.tasz.institutionmanager.contract.LoginData;
 import com.tasz.institutionmanager.contract.User;
-
-import java.util.Optional;
 
 
 public interface AuthenticationService {
     void addUser(final User user);
 
-    void setPassword(final User user, final String password);
+    void setPassword(final LoginData loginData);
 
-    Optional<User> getUserByUserName(final String username);
+    User login(final LoginData username);
 }

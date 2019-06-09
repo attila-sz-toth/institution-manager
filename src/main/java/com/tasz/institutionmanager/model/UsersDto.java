@@ -1,6 +1,5 @@
 package com.tasz.institutionmanager.model;
 
-import com.tasz.institutionmanager.constants.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,13 +7,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "institutionm")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class UsersDto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
+    @SequenceGenerator(name = "user_id_generator", sequenceName = "seq_user_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     private Integer id;
 
     private String username;
@@ -24,5 +24,5 @@ public class UsersDto {
     @Enumerated(EnumType.STRING)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    private Role role;
+    private RolesDto role;
 }

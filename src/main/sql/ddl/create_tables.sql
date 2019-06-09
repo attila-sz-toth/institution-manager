@@ -6,7 +6,7 @@ CREATE TABLE institutionm.roles (
 
 CREATE TABLE institutionm.users (
   id       INTEGER      NOT NULL,
-  username VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255),
   role_id  INTEGER      NOT NULL REFERENCES institutionm.roles (id),
   PRIMARY KEY (id)
