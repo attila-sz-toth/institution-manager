@@ -20,4 +20,11 @@ public class HealthCheckController {
         log.info("Health check called!");
         return Collections.singletonMap("response", "Look ma' I'm running!");
     }
+
+    @GetMapping(value = "/protected-health-check", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Map<String, String> protectedHealthCheck() {
+        log.info("Health check called on a protected endpoint!");
+        return Collections.singletonMap("response", "Look ma' I'm running!");
+    }
 }

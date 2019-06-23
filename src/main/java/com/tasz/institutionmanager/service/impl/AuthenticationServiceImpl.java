@@ -8,7 +8,6 @@ import com.tasz.institutionmanager.dao.UsersDao;
 import com.tasz.institutionmanager.model.UsersDto;
 import com.tasz.institutionmanager.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +21,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UsersDtoToUserConverter usersDtoToUserConverter;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @Value("${app.salt}")
-    private String salt;
-
     @Override
     public void addUser(final User user) {
         final UsersDto usersDto = userToUsersDtoConverter.convert(user);
@@ -34,13 +30,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public void setPassword(final LoginData loginData) {
-        final String hashedPassword = hashPassword(loginData.getPassword());
-        usersDao.setPassword(loginData.getUsername(), hashedPassword);
-    }
-
-    private String hashPassword(final String password) {
-        final String saltedPassword = password.concat(salt);
-        return passwordEncoder.encode(saltedPassword);
+        final String encodedPassword = passwordEncoder.encode(loginData.getPassword());
+        usersDao.setPassword(loginData.getUsername(), encodedPassword);
     }
 
     @Override
@@ -60,9 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return false;
         }
 
-        final String saltedInputPassword = inputPassword.concat(salt);
-        final String hashedInputPassword = passwordEncoder.encode(saltedInputPassword);
-
+        final String hashedInputPassword = passwordEncoder.encode(inputPassword);
         return hashedInputPassword.equals(storedPassword);
     }
 }

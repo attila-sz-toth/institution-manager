@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+
 @Configuration
 @EntityScan(basePackageClasses = UsersDto.class)
 public class DbConfiguration {

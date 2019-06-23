@@ -18,7 +18,7 @@ public class AuthenticationController {
 
     private AuthenticationService authenticationService;
 
-    @PostMapping(value = "login",
+    @GetMapping(value = "login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
