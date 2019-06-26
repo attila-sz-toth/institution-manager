@@ -37,12 +37,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/health-check").permitAll()
                 .antMatchers("/protected-health-check").hasAnyRole(Role.ADMIN.name(), Role.EMPLOYEE.name())
                 .antMatchers("/login").permitAll()
-//                .antMatchers("/add-user").hasAnyRole(Role.ADMIN.name(), Role.EMPLOYEE.name())
                 .antMatchers("/add-user").permitAll()
-//                .antMatchers("/set-password").hasAnyRole(Role.ADMIN.name(), Role.EMPLOYEE.name())
                 .antMatchers("/set-password").permitAll()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .csrf().disable();
     }
 
     @Override
