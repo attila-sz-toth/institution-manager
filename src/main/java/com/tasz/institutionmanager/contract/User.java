@@ -2,7 +2,6 @@ package com.tasz.institutionmanager.contract;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.tasz.institutionmanager.constants.Role;
 import lombok.Builder;
 import lombok.Value;
 
@@ -11,7 +10,8 @@ import lombok.Value;
 @JsonDeserialize(builder = User.UserBuilder.class)
 public class User {
     private String username;
-    private Role role;
+    private String password;
+    private String role;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class UserBuilder {
