@@ -1,7 +1,7 @@
 package com.tasz.institutionmanager.service.impl;
 
-import com.tasz.institutionmanager.dao.UsersDao;
-import com.tasz.institutionmanager.model.UsersDto;
+import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.repository.UserRepository;
 import com.tasz.institutionmanager.service.MyUserPrincipal;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +15,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final UsersDao usersDao;
+    private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        final UsersDto usersDto = usersDao.findByUsername(userName);
-        if (usersDto == null) {
-            log.info("User not found: {}", userName);
+    public UserDetails loadUserByUsername(String userName) {
+        final User user = this.userRepository.findByUsername(userName);
+        if (user == null) {
+            log.info("UserRegistrationDetails not found: {}", userName);
+            throw new UsernameNotFoundException("UserRegistrationDetails not found: " + userName);
         }
 
-        return new MyUserPrincipal(usersDto);
+        return new MyUserPrincipal(user);
     }
 }

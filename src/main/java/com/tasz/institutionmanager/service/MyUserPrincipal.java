@@ -1,6 +1,6 @@
 package com.tasz.institutionmanager.service;
 
-import com.tasz.institutionmanager.model.UsersDto;
+import com.tasz.institutionmanager.model.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,25 +13,23 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class MyUserPrincipal implements UserDetails {
-    private final UsersDto usersDto;
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final SimpleGrantedAuthority adminRole = new SimpleGrantedAuthority("ADMIN");
+        final SimpleGrantedAuthority role = new SimpleGrantedAuthority(user.getRole().getRoleName());
 
-        return List.of(adminRole);
+        return List.of(role);
     }
 
     @Override
     public String getPassword() {
-        log.info("Returning password in {} for user {}", this.getClass().getName(), usersDto.getUsername());
-        return usersDto.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        log.info("Returning password in {} for user {}", this.getClass().getName(), usersDto.getUsername());
-        return usersDto.getUsername();
+        return user.getUsername();
     }
 
     @Override

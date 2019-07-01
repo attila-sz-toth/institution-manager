@@ -24,17 +24,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/health-check").permitAll()
                 .antMatchers("/protected-health-check").authenticated()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login").authenticated()
                 .antMatchers("/add-user").permitAll()
                 .antMatchers("/set-password").permitAll()
                 .and()
                 .httpBasic()
                 .and()
+                .logout()
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .and()
                 .csrf().disable();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider());
     }
 

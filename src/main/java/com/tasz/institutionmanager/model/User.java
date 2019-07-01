@@ -11,18 +11,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UsersDto {
+public class User {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "seq_user_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    private RolesDto role;
+    private Role role;
 }

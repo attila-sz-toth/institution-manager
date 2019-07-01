@@ -1,21 +1,24 @@
 package com.tasz.institutionmanager.model;
 
-import com.tasz.institutionmanager.constants.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles", schema = "institutionm")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RolesDto {
+public class Role {
     @Id
+    @Column(name = "id")
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role_name")
+    private String roleName;
 }
