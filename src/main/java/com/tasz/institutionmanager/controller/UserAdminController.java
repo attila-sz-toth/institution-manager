@@ -28,7 +28,7 @@ public class UserAdminController {
         userAdminService.addUser(userRegistrationDetails);
     }
 
-    @PostMapping(value = "set-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "set-password", consumes = MediaType.TEXT_PLAIN_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public void setPassword(final Authentication authentication, @RequestBody final String password) {
         final String userName = authentication.getName();
