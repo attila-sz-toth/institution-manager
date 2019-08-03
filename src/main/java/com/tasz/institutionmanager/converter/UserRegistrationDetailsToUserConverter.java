@@ -18,7 +18,6 @@ public class UserRegistrationDetailsToUserConverter implements Converter<UserReg
     public User convert(UserRegistrationDetails from) {
         final User user = new User();
         user.setUsername(from.getUsername());
-        user.setPassword(passwordEncoder.encode(from.getPassword()));
         user.setRole(roleRepository.findByRoleName(from.getRole()));
 
         return user;
