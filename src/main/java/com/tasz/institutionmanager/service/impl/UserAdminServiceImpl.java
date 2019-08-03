@@ -1,7 +1,9 @@
 package com.tasz.institutionmanager.service.impl;
 
+import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.converter.UserRegistrationDetailsToUserConverter;
+import com.tasz.institutionmanager.converter.UserToUserDetailsConverter;
 import com.tasz.institutionmanager.model.User;
 import com.tasz.institutionmanager.repository.UserRepository;
 import com.tasz.institutionmanager.service.UserAdminService;
@@ -12,24 +14,50 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserAdminServiceImpl implements UserAdminService {
 
+    private static final int DEFAULT_PASSWORD_LENGTH = 16;
+
     private final UserRepository userRepository;
     private final UserRegistrationDetailsToUserConverter userRegistrationDetailsToUserConverter;
+    private final UserToUserDetailsConverter userToUserDetailsConverter;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
+    public List<UserDetails> getUsers() {
+        final Iterable<User> allUsers = userRepository.findAll();
+
+        List<User> usersList = new ArrayList<>();
+        allUsers.forEach(usersList::add);
+
+        return userToUserDetailsConverter.convertAll(usersList);
+    }
+
+    @Override
+    @Transactional
     public void addUser(final UserRegistrationDetails userRegistrationDetails) {
-        final String password = generateRandomSpecialCharacters(16);
-        log.info("Password generated for user {} : {}", password);
+        final String password = generatePassword();
+        log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
         final User usersDto = userRegistrationDetailsToUserConverter.convert(userRegistrationDetails);
         usersDto.setPassword(password);
 
+        log.info("Adding new user {} with role {}", userRegistrationDetails.getUsername(), userRegistrationDetails.getRole());
         this.userRepository.save(usersDto);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(final String username) {
+        log.info("Deleting user {}", username);
+        userRepository.deleteUserByUsername(username);
     }
 
     @Override
@@ -39,8 +67,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         userRepository.setPassword(userName, encodedPassword);
     }
 
-    public String generateRandomSpecialCharacters(int length) {
-        return RandomStringUtils.random(16);
+    private String generatePassword() {
+        return RandomStringUtils.random(DEFAULT_PASSWORD_LENGTH);
     }
-
 }

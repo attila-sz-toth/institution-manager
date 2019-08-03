@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends CrudRepository<User, Integer> {
     User findByUsername(final String username);
 
+    void deleteUserByUsername(final String username);
+
     @Modifying
     @Query("update User user set user.password = :password where user.username = :username")
     int setPassword(@Param("username") String username, @Param("password") String password);

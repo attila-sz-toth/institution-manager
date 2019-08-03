@@ -1,7 +1,6 @@
 package com.tasz.institutionmanager.configuration;
 
 import com.tasz.institutionmanager.service.impl.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,8 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+    private final MyUserDetailsService userDetailsService;
+
+    public WebSecurityConfiguration(MyUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -25,8 +27,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/health-check").permitAll()
                 .antMatchers("/protected-health-check").authenticated()
                 .antMatchers("/login").authenticated()
-                .antMatchers("/add-user").permitAll()
-                .antMatchers("/set-password").permitAll()
+                .antMatchers("/add-user").authenticated()
+                .antMatchers("/set-password").authenticated()
+                .antMatchers("/get-users").authenticated()
+                .antMatchers("/delete-user").authenticated()
                 .and()
                 .httpBasic()
                 .and()
