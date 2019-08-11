@@ -47,7 +47,8 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
         final User usersDto = userRegistrationDetailsToUserConverter.convert(userRegistrationDetails);
-        usersDto.setPassword(password);
+        final String encodedPassword = passwordEncoder.encode(password);
+        usersDto.setPassword(encodedPassword);
 
         log.info("Adding new user {} with role {}", userRegistrationDetails.getUsername(), userRegistrationDetails.getRole());
         this.userRepository.save(usersDto);
@@ -68,6 +69,6 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     private String generatePassword() {
-        return RandomStringUtils.random(DEFAULT_PASSWORD_LENGTH);
+        return RandomStringUtils.randomAscii(DEFAULT_PASSWORD_LENGTH);
     }
 }
