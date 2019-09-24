@@ -26,6 +26,12 @@ public class UserAdminController {
         return userAdminService.getUsers();
     }
 
+    @GetMapping(value = "get-user", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDetails getUser(@RequestBody final String username) {
+        log.info("Getting user data for user: {}", username);
+        return userAdminService.getUser(username);
+    }
+
     @PostMapping(value = "add-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public void addUser(@RequestBody final UserRegistrationDetails userRegistrationDetails) {

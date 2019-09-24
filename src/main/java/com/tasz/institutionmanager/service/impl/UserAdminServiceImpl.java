@@ -37,7 +37,16 @@ public class UserAdminServiceImpl implements UserAdminService {
         List<User> usersList = new ArrayList<>();
         allUsers.forEach(usersList::add);
 
+        log.info("User List received: {}", usersList);
         return userToUserDetailsConverter.convertAll(usersList);
+    }
+
+    @Override
+    public UserDetails getUser(String username) {
+        final User user = userRepository.findByUsername(username);
+//        log.info("Retrieved user data: {}", user.;
+
+        return userToUserDetailsConverter.convert(user);
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserAdminService {
     List<UserDetails> getUsers();
 
+    UserDetails getUser(final String username);
+
     void addUser(final UserRegistrationDetails userRegistrationDetails);
 
     void deleteUser(final String username);

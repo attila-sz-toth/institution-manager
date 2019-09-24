@@ -28,6 +28,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/add-user").authenticated()
                 .antMatchers("/set-password").authenticated()
                 .antMatchers("/get-users").authenticated()
+                .antMatchers("/get-user").permitAll()
                 .antMatchers("/delete-user").authenticated()
                 .and()
                 .httpBasic()

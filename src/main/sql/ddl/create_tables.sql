@@ -33,10 +33,12 @@ CREATE TABLE IF NOT EXISTS institutionm.institutions (
 
 create table IF NOT EXISTS institutionm.institutions_to_types (
   institution_id      integer not null references institutionm.institutions (id),
-  institution_type_id integer not null references institutionm.institution_types (id)
+  institution_type_id integer not null references institutionm.institution_types (id),
+  PRIMARY KEY (institution_id, institution_type_id)
 );
 
 create table IF NOT EXISTS institutionm.institutions_to_users (
   institution_id integer not null references institutionm.institutions (id),
-  user_id        integer not null references institutionm.users (id)
+  user_id        integer not null references institutionm.users (id),
+  PRIMARY KEY (institution_id, user_id)
 );

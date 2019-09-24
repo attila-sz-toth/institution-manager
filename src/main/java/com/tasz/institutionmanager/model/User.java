@@ -1,16 +1,19 @@
 package com.tasz.institutionmanager.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "institutionm")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class User {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "seq_user_id", allocationSize = 1)
@@ -27,4 +30,10 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "institutions_to_users", schema = "institutionm",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "institution_id"))
+    private Set<Institution> institutionSet;
 }
