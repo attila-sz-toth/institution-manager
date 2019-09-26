@@ -16,4 +16,6 @@ public interface UserAdminService {
     void deleteUser(final String username);
 
     void setPassword(final String userName, final String password);
+
+    void updateInstitutionList(final String userName, final List<String> institutionList);
 }

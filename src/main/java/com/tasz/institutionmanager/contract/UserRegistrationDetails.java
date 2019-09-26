@@ -11,6 +11,7 @@ import lombok.Value;
 public class UserRegistrationDetails {
     private String username;
     private String role;
+    private String institutionName;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class UserRegistrationDetailsBuilder {
