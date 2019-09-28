@@ -11,7 +11,4 @@ public class InstitutionDetails {
     private String address;
     private String institutionType;
     private Set<CareType> careTypes;
-
-    private Integer numberOfCareReceivers;
-    private Integer waitingListSize;
 }
