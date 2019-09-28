@@ -5,6 +5,7 @@ import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.converter.UserRegistrationDetailsToUserConverter;
 import com.tasz.institutionmanager.converter.UserToUserDetailsConverter;
 import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.UserRepository;
 import com.tasz.institutionmanager.service.UserAdminService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     private static final int DEFAULT_PASSWORD_LENGTH = 16;
 
     private final UserRepository userRepository;
+    private final InstitutionRepository institutionRepository;
     private final UserRegistrationDetailsToUserConverter userRegistrationDetailsToUserConverter;
     private final UserToUserDetailsConverter userToUserDetailsConverter;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -44,8 +47,6 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public UserDetails getUser(String username) {
         final User user = userRepository.findByUsername(username);
-//        log.info("Retrieved user data: {}", user.;
-
         return userToUserDetailsConverter.convert(user);
     }
 
@@ -75,6 +76,15 @@ public class UserAdminServiceImpl implements UserAdminService {
     public void setPassword(final String userName, final String password) {
         final String encodedPassword = passwordEncoder.encode(password);
         userRepository.setPassword(userName, encodedPassword);
+    }
+
+    @Override
+    @Transactional
+    public void updateInstitutionList(String userName, List<String> institutionList) {
+        final User user = userRepository.findByUsername(userName);
+        user.setInstitutionSet(institutionList.stream()
+                .map(institutionRepository::findByName)
+                .collect(Collectors.toSet()));
     }
 
     private String generatePassword() {

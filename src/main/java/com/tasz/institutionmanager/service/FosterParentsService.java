@@ -8,7 +8,7 @@ import java.util.List;
 public interface FosterParentsService {
     FosterParentDetails getFosterParentDetails(final PersonalDetailsCompositeKey compositeKey);
 
-    List<FosterParentDetails> getFosterParentsDetailsList(final PersonalDetailsCompositeKey childCompositKey);
+    List<FosterParentDetails> getFosterParentsDetailsList(final PersonalDetailsCompositeKey childCompositeKey);
 
     void addFosterParentDetails(final FosterParentDetails fosterParentDetailsDetails);
 

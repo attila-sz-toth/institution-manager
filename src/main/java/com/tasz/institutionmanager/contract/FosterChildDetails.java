@@ -11,6 +11,6 @@ import java.util.Set;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class FosterParentDetails extends PersonalDetails {
-    private Set<FosterChildDetails> fosterChildren;
+public class FosterChildDetails extends CareReceiverDetails {
+    private Set<FosterParentDetails> fosterChildren;
 }

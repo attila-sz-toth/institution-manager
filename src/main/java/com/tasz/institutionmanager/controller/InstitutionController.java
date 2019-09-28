@@ -1,5 +1,6 @@
 package com.tasz.institutionmanager.controller;
 
+import com.tasz.institutionmanager.contract.FosterParentDetails;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 import com.tasz.institutionmanager.service.InstitutionService;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/institutions")
+@CrossOrigin(origins = "http://localhost:3000")
 public class InstitutionController {
 
     private InstitutionService institutionService;
@@ -48,5 +49,12 @@ public class InstitutionController {
     public void updateRequest(@PathVariable("institution-name") final String institutionName, @RequestBody final InstitutionDetails institutionDetails) {
         log.info("Updating institution details of {}", institutionName);
         institutionService.updateInstitution(institutionName, institutionDetails);
+
+    }
+
+    @GetMapping(value = "/get-parent-list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FosterParentDetails> getFosterParents(final String institutionName) {
+        log.info("Getting foster parents of institution: {}", institutionName);
+        return institutionService.getFosterParents(institutionName);
     }
 }

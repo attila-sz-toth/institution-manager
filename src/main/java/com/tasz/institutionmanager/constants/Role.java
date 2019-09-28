@@ -3,11 +3,9 @@ package com.tasz.institutionmanager.constants;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum CareStatus {
-    ACTIVE(0),
-    SUSPENDED(1),
-    WAITING(2),
-    TERMINATED(3);
+public enum Role {
+    ADMIN(0),
+    EMPLOYEE(1);
 
     private Integer id;
 }
