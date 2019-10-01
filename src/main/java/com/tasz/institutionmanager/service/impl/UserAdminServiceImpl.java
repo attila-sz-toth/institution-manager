@@ -2,8 +2,8 @@ package com.tasz.institutionmanager.service.impl;
 
 import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.contract.UserRegistrationDetails;
-import com.tasz.institutionmanager.converter.UserRegistrationDetailsToUserConverter;
-import com.tasz.institutionmanager.converter.UserToUserDetailsConverter;
+import com.tasz.institutionmanager.converter.UserConverter;
+import com.tasz.institutionmanager.converter.UserDetailsConverter;
 import com.tasz.institutionmanager.model.User;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.UserRepository;
@@ -28,8 +28,8 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     private final UserRepository userRepository;
     private final InstitutionRepository institutionRepository;
-    private final UserRegistrationDetailsToUserConverter userRegistrationDetailsToUserConverter;
-    private final UserToUserDetailsConverter userToUserDetailsConverter;
+    private final UserConverter userConverter;
+    private final UserDetailsConverter userDetailsConverter;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -41,13 +41,13 @@ public class UserAdminServiceImpl implements UserAdminService {
         allUsers.forEach(usersList::add);
 
         log.info("User List received: {}", usersList);
-        return userToUserDetailsConverter.convertAll(usersList);
+        return userDetailsConverter.convertAll(usersList);
     }
 
     @Override
     public UserDetails getUser(String username) {
         final User user = userRepository.findByUsername(username);
-        return userToUserDetailsConverter.convert(user);
+        return userDetailsConverter.convert(user);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         final String password = generatePassword();
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
-        final User usersDto = userRegistrationDetailsToUserConverter.convert(userRegistrationDetails);
+        final User usersDto = userConverter.convert(userRegistrationDetails);
         final String encodedPassword = passwordEncoder.encode(password);
         usersDto.setPassword(encodedPassword);
 
@@ -82,7 +82,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Transactional
     public void updateInstitutionList(String userName, List<String> institutionList) {
         final User user = userRepository.findByUsername(userName);
-        user.setInstitutionSet(institutionList.stream()
+        user.setInstitutionEntitySet(institutionList.stream()
                 .map(institutionRepository::findByName)
                 .collect(Collectors.toSet()));
     }

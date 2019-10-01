@@ -1,6 +1,7 @@
 package com.tasz.institutionmanager.contract;
 
 import com.tasz.institutionmanager.constants.CareType;
+import com.tasz.institutionmanager.constants.InstitutionType;
 import lombok.Data;
 
 import java.util.Set;
@@ -9,6 +10,6 @@ import java.util.Set;
 public class InstitutionDetails {
     private String name;
     private String address;
-    private String institutionType;
+    private InstitutionType institutionType;
     private Set<CareType> careTypes;
 }

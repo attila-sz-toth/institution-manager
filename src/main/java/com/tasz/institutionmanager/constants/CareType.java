@@ -1,20 +1,24 @@
 package com.tasz.institutionmanager.constants;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@AllArgsConstructor
-@Getter
 public enum CareType {
-    IDOSEK_OTTHONA(0),
-    HAZI_SEGITSEG_NYUJTAS(1),
-    CSALADI_BOLCSODE(2),
-    SZENVEDELYBETEGEK_REHABILITACIOJA(3),
-    CSALADOK_ATMENETI_OTTHONA(4),
-    KULSO_FEROHELY(5),
-    OTTHONT_NYUJTO_ELLATAS(6),
-    KULONLEGES_ELLATAS(7),
-    UTOGONDOZOI_ELLATAS(8);
-
-    private Integer id;
+    @JsonProperty("IDOSEK_OTTHONA")
+    IDOSEK_OTTHONA,
+    @JsonProperty("HAZI_SEGITSEG_NYUJTAS")
+    HAZI_SEGITSEG_NYUJTAS,
+    @JsonProperty("CSALADI_BOLCSODE")
+    CSALADI_BOLCSODE,
+    @JsonProperty("SZENVEDELYBETEGEK_REHABILITACIOJA")
+    SZENVEDELYBETEGEK_REHABILITACIOJA,
+    @JsonProperty("CSALADOK_ATMENETI_OTTHONA")
+    CSALADOK_ATMENETI_OTTHONA,
+    @JsonProperty("KULSO_FEROHELY")
+    KULSO_FEROHELY,
+    @JsonProperty("OTTHONT_NYUJTO_ELLATAS")
+    OTTHONT_NYUJTO_ELLATAS,
+    @JsonProperty("KULONLEGES_ELLATAS")
+    KULONLEGES_ELLATAS,
+    @JsonProperty("UTOGONDOZOI_ELLATAS")
+    UTOGONDOZOI_ELLATAS
 }

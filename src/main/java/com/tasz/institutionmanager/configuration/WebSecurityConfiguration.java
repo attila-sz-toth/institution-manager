@@ -24,6 +24,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/health-check").permitAll()
                 .antMatchers("/protected-health-check").authenticated()
+                .antMatchers("/institutions/*").permitAll()
                 .antMatchers("/login").authenticated()
                 .antMatchers("/add-user").authenticated()
                 .antMatchers("/set-password").authenticated()

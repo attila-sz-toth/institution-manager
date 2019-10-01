@@ -35,5 +35,5 @@ public class User {
     @JoinTable(name = "institutions_to_users", schema = "institutionm",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "institution_id"))
-    private Set<Institution> institutionSet;
+    private Set<InstitutionEntity> institutionEntitySet;
 }

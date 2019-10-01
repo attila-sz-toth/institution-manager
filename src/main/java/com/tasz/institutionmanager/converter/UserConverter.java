@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class UserRegistrationDetailsToUserConverter implements Converter<UserRegistrationDetails, User> {
+public class UserConverter implements Converter<UserRegistrationDetails, User> {
 
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;

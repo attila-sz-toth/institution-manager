@@ -1,8 +1,10 @@
 package com.tasz.institutionmanager.repository;
 
-import com.tasz.institutionmanager.model.Institution;
-import org.springframework.data.repository.CrudRepository;
+import com.tasz.institutionmanager.model.InstitutionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InstitutionRepository extends CrudRepository<Institution, Integer> {
-    Institution findByName(final String institutionName);
+public interface InstitutionRepository extends JpaRepository<InstitutionEntity, Integer> {
+    InstitutionEntity findByName(final String institutionName);
+
+    void deleteByName(final String institutionName);
 }

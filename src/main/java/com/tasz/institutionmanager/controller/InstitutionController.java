@@ -1,5 +1,6 @@
 package com.tasz.institutionmanager.controller;
 
+import com.tasz.institutionmanager.constants.CareType;
 import com.tasz.institutionmanager.contract.FosterParentDetails;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 import com.tasz.institutionmanager.service.InstitutionService;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -50,6 +52,18 @@ public class InstitutionController {
         log.info("Updating institution details of {}", institutionName);
         institutionService.updateInstitution(institutionName, institutionDetails);
 
+    }
+
+    @PostMapping(value = "/add-care-type/{institution-name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void addCareType(@PathVariable("institution-name") final String institutionName, @RequestBody final Set<CareType> careTypes) {
+        log.info("Adding care type {} from institution {}", careTypes, institutionName);
+        institutionService.addCareTypes(institutionName, careTypes);
+    }
+
+    @DeleteMapping(value = "/delete-care-type/{institution-name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteCareType(@PathVariable("institution-name") final String institutionName, @RequestBody final Set<CareType> careTypes) {
+        log.info("Deleting care type {} from institution {}", careTypes, institutionName);
+        institutionService.deleteCareTypes(institutionName, careTypes);
     }
 
     @GetMapping(value = "/get-parent-list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
