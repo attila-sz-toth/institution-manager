@@ -1,11 +1,10 @@
 package com.tasz.institutionmanager.service.impl;
 
 import com.tasz.institutionmanager.constants.CareType;
-import com.tasz.institutionmanager.contract.FosterParentDetails;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 import com.tasz.institutionmanager.converter.InstitutionDetailsConverter;
 import com.tasz.institutionmanager.converter.InstitutionEntityConverter;
-import com.tasz.institutionmanager.model.InstitutionCareType;
+import com.tasz.institutionmanager.model.InstitutionCareTypeEntity;
 import com.tasz.institutionmanager.model.InstitutionEntity;
 import com.tasz.institutionmanager.repository.InstitutionCareTypeRepository;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
@@ -64,17 +63,17 @@ public class InstitutionServiceImpl implements InstitutionService {
     @Override
     public void addCareTypes(final String institutionName, final Set<CareType> careTypes) {
         final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
-        final Set<InstitutionCareType> institutionCareTypes = institutionEntity.getCareTypes();
+        final Set<InstitutionCareTypeEntity> institutionCareTypeEntities = institutionEntity.getCareTypes();
         careTypes.stream()
-                .filter(careType -> institutionCareTypes.stream()
-                        .noneMatch(institutionCareType -> institutionCareType.getCareType().equals(careType.name())))
+                .filter(careType -> institutionCareTypeEntities.stream()
+                        .noneMatch(institutionCareTypeEntity -> institutionCareTypeEntity.getCareType().equals(careType.name())))
                 .forEach(careType -> {
-                    final InstitutionCareType institutionCareType = new InstitutionCareType();
-                    institutionCareType.setInstitutionEntity(institutionEntity);
-                    institutionCareType.setCareType(careType.name());
-                    
-                    log.info("Persisting InstitutionCareType entity {}", institutionCareType);
-                    institutionCareTypeRepository.save(institutionCareType);
+                    final InstitutionCareTypeEntity institutionCareTypeEntity = new InstitutionCareTypeEntity();
+                    institutionCareTypeEntity.setInstitutionEntity(institutionEntity);
+                    institutionCareTypeEntity.setCareType(careType.name());
+
+                    log.info("Persisting InstitutionCareTypeEntity entity {}", institutionCareTypeEntity);
+                    institutionCareTypeRepository.save(institutionCareTypeEntity);
                 });
     }
 
@@ -86,20 +85,5 @@ public class InstitutionServiceImpl implements InstitutionService {
                 careType -> institutionCareTypeRepository
                         .deleteByCareTypeAndInstitutionEntity(careType.name(), institutionEntity));
 
-    }
-
-    @Override
-    public Integer getNumberOfCareReceivers() {
-        return null;
-    }
-
-    @Override
-    public Integer getSizeOfWaitingList() {
-        return null;
-    }
-
-    @Override
-    public List<FosterParentDetails> getFosterParents(final String institutionName) {
-        return null;
     }
 }

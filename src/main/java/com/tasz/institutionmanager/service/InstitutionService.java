@@ -1,7 +1,6 @@
 package com.tasz.institutionmanager.service;
 
 import com.tasz.institutionmanager.constants.CareType;
-import com.tasz.institutionmanager.contract.FosterParentDetails;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 
 import java.util.List;
@@ -21,10 +20,4 @@ public interface InstitutionService {
     void addCareTypes(final String institutionName, final Set<CareType> careTypes);
 
     void deleteCareTypes(final String institutionName, final Set<CareType> careTypes);
-
-    Integer getNumberOfCareReceivers();
-
-    Integer getSizeOfWaitingList();
-
-    List<FosterParentDetails> getFosterParents(final String institutionName);
 }

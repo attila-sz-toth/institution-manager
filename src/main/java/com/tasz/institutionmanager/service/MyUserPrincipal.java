@@ -1,6 +1,6 @@
 package com.tasz.institutionmanager.service;
 
-import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.model.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,23 +13,23 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class MyUserPrincipal implements UserDetails {
-    private final User user;
+    private final UserEntity userEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final SimpleGrantedAuthority role = new SimpleGrantedAuthority(user.getRole().getRoleName());
+        final SimpleGrantedAuthority role = new SimpleGrantedAuthority(userEntity.getRoleEntity().getRoleName());
 
         return List.of(role);
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return userEntity.getUsername();
     }
 
     @Override

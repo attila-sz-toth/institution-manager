@@ -1,7 +1,7 @@
 package com.tasz.institutionmanager.configuration;
 
-import com.tasz.institutionmanager.model.Role;
-import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.model.RoleEntity;
+import com.tasz.institutionmanager.model.UserEntity;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackageClasses = {User.class, Role.class})
+@EntityScan(basePackageClasses = {UserEntity.class, RoleEntity.class})
 public class DbConfiguration {
     @Bean
     @ConfigurationProperties("db.datasource")

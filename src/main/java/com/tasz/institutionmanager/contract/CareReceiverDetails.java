@@ -15,6 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class CareReceiverDetails extends PersonalDetails {
     private CareStatus careStatus;
+    private String institutionName;
     private Integer taj;
     private Date startOfCare; //optional
     private Date endOfCare; //optional

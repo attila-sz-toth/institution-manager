@@ -1,16 +1,12 @@
 package com.tasz.institutionmanager.contract;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.List;
 
-@Builder
-@Getter
-@EqualsAndHashCode
+@Data
 public class UserDetails {
-    private final String username;
-    private final String role;
-    private final List<String> institutions;
+    private String username;
+    private String role;
+    private List<String> institutions;
 }

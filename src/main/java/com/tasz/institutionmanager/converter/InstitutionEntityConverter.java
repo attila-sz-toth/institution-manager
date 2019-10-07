@@ -1,8 +1,9 @@
 package com.tasz.institutionmanager.converter;
 
 import com.tasz.institutionmanager.contract.InstitutionDetails;
-import com.tasz.institutionmanager.model.InstitutionCareType;
+import com.tasz.institutionmanager.model.InstitutionCareTypeEntity;
 import com.tasz.institutionmanager.model.InstitutionEntity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -10,23 +11,22 @@ import java.util.stream.Collectors;
 @Component
 public class InstitutionEntityConverter implements Converter<InstitutionDetails, InstitutionEntity> {
     @Override
-    public InstitutionEntity convert(final InstitutionDetails from) {
-        return convert(from, new InstitutionEntity());
+    public InstitutionEntity convert(final InstitutionDetails institutionDetails) {
+        return convert(institutionDetails, new InstitutionEntity());
     }
 
-    public InstitutionEntity convert(final InstitutionDetails from, final InstitutionEntity to) {
-        to.setName(from.getName());
-        to.setAddress(from.getAddress());
-        to.setType(from.getInstitutionType());
-        to.setCareTypes(from.getCareTypes().stream()
-                .map(careType -> {
-                    final InstitutionCareType institutionCareType = new InstitutionCareType();
-                    institutionCareType.setCareType(careType.name());
-                    institutionCareType.setInstitutionEntity(to);
+    public InstitutionEntity convert(final InstitutionDetails institutionDetails, final InstitutionEntity institutionEntity) {
+        BeanUtils.copyProperties(institutionDetails, institutionEntity);
 
-                    return institutionCareType;
+        institutionEntity.setCareTypes(institutionDetails.getCareTypes().stream()
+                .map(careType -> {
+                    final InstitutionCareTypeEntity institutionCareTypeEntity = new InstitutionCareTypeEntity();
+                    institutionCareTypeEntity.setCareType(careType.name());
+                    institutionCareTypeEntity.setInstitutionEntity(institutionEntity);
+
+                    return institutionCareTypeEntity;
                 }).collect(Collectors.toSet()));
 
-        return to;
+        return institutionEntity;
     }
 }

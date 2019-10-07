@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Role {
+public class RoleEntity {
     @Id
     @Column(name = "id")
     private Integer id;

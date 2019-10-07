@@ -1,8 +1,9 @@
 package com.tasz.institutionmanager.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,8 +11,9 @@ import javax.persistence.*;
 @Table(name = "INSTITUTION_CARE_TYPES", schema = "institutionm")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class InstitutionCareType {
+@Getter
+@Setter
+public class InstitutionCareTypeEntity {
     @Id
     @SequenceGenerator(name = "institution_id_generator", sequenceName = "institutionm.seq_institution_care_type_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "institution_id_generator")

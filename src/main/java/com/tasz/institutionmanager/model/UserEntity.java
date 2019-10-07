@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class UserEntity {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "seq_user_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
@@ -29,7 +29,7 @@ public class User {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    private Role role;
+    private RoleEntity roleEntity;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "institutions_to_users", schema = "institutionm",

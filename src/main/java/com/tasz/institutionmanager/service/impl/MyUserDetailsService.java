@@ -1,6 +1,6 @@
 package com.tasz.institutionmanager.service.impl;
 
-import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.model.UserEntity;
 import com.tasz.institutionmanager.repository.UserRepository;
 import com.tasz.institutionmanager.service.MyUserPrincipal;
 import lombok.AllArgsConstructor;
@@ -19,12 +19,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) {
-        final User user = this.userRepository.findByUsername(userName);
-        if (user == null) {
+        final UserEntity userEntity = this.userRepository.findByUsername(userName);
+        if (userEntity == null) {
             log.info("UserRegistrationDetails not found: {}", userName);
             throw new UsernameNotFoundException("UserRegistrationDetails not found: " + userName);
         }
 
-        return new MyUserPrincipal(user);
+        return new MyUserPrincipal(userEntity);
     }
 }

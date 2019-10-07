@@ -1,7 +1,6 @@
 package com.tasz.institutionmanager.controller;
 
 import com.tasz.institutionmanager.constants.CareType;
-import com.tasz.institutionmanager.contract.FosterParentDetails;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 import com.tasz.institutionmanager.service.InstitutionService;
 import lombok.AllArgsConstructor;
@@ -14,8 +13,8 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-@RestController
 @AllArgsConstructor
+@RestController
 @RequestMapping("/institutions")
 @CrossOrigin(origins = "http://localhost:3000")
 public class InstitutionController {
@@ -64,11 +63,5 @@ public class InstitutionController {
     public void deleteCareType(@PathVariable("institution-name") final String institutionName, @RequestBody final Set<CareType> careTypes) {
         log.info("Deleting care type {} from institution {}", careTypes, institutionName);
         institutionService.deleteCareTypes(institutionName, careTypes);
-    }
-
-    @GetMapping(value = "/get-parent-list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FosterParentDetails> getFosterParents(final String institutionName) {
-        log.info("Getting foster parents of institution: {}", institutionName);
-        return institutionService.getFosterParents(institutionName);
     }
 }

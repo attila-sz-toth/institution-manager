@@ -33,9 +33,12 @@ public class InstitutionEntity {
     @Enumerated(EnumType.STRING)
     private InstitutionType type;
 
-    @OneToMany(mappedBy = "institutionEntity", cascade = CascadeType.ALL)
-    private Set<InstitutionCareType> careTypes = new HashSet<>();
+    @OneToMany(mappedBy = "institutionEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<InstitutionCareTypeEntity> careTypes = new HashSet<>();
+
+    @OneToMany(mappedBy = "institutionEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<CareReceiverEntity> careReceiverEntities = new HashSet<>();
 
 //    @ManyToMany(mappedBy = "institutionEntitySet")
-//    private Set<User> userList;
+//    private Set<UserEntity> userList;
 }

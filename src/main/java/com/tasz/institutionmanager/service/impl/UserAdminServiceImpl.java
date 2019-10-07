@@ -4,7 +4,7 @@ import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.converter.UserConverter;
 import com.tasz.institutionmanager.converter.UserDetailsConverter;
-import com.tasz.institutionmanager.model.User;
+import com.tasz.institutionmanager.model.UserEntity;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.UserRepository;
 import com.tasz.institutionmanager.service.UserAdminService;
@@ -35,19 +35,19 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     @Transactional
     public List<UserDetails> getUsers() {
-        final Iterable<User> allUsers = userRepository.findAll();
+        final Iterable<UserEntity> allUsers = userRepository.findAll();
 
-        List<User> usersList = new ArrayList<>();
+        List<UserEntity> usersList = new ArrayList<>();
         allUsers.forEach(usersList::add);
 
-        log.info("User List received: {}", usersList);
+        log.info("UserEntity List received: {}", usersList);
         return userDetailsConverter.convertAll(usersList);
     }
 
     @Override
     public UserDetails getUser(String username) {
-        final User user = userRepository.findByUsername(username);
-        return userDetailsConverter.convert(user);
+        final UserEntity userEntity = userRepository.findByUsername(username);
+        return userDetailsConverter.convert(userEntity);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class UserAdminServiceImpl implements UserAdminService {
         final String password = generatePassword();
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
-        final User usersDto = userConverter.convert(userRegistrationDetails);
+        final UserEntity usersDto = userConverter.convert(userRegistrationDetails);
         final String encodedPassword = passwordEncoder.encode(password);
         usersDto.setPassword(encodedPassword);
 
-        log.info("Adding new user {} with role {}", userRegistrationDetails.getUsername(), userRegistrationDetails.getRole());
+        log.info("Adding new user {} with roleEntity {}", userRegistrationDetails.getUsername(), userRegistrationDetails.getRole());
         this.userRepository.save(usersDto);
     }
 
@@ -81,8 +81,8 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     @Transactional
     public void updateInstitutionList(String userName, List<String> institutionList) {
-        final User user = userRepository.findByUsername(userName);
-        user.setInstitutionEntitySet(institutionList.stream()
+        final UserEntity userEntity = userRepository.findByUsername(userName);
+        userEntity.setInstitutionEntitySet(institutionList.stream()
                 .map(institutionRepository::findByName)
                 .collect(Collectors.toSet()));
     }
