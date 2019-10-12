@@ -2,12 +2,13 @@ package com.tasz.institutionmanager.service;
 
 import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.contract.UserRegistrationDetails;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 
 public interface UserAdminService {
-    List<UserDetails> getUsers();
+    Page<UserDetails> getUsers(Integer pageNumber);
 
     UserDetails getUser(final String username);
 

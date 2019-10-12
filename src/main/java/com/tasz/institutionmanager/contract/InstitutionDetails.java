@@ -10,6 +10,6 @@ import java.util.Set;
 public class InstitutionDetails {
     private String name;
     private String address;
-    private InstitutionType institutionType;
+    private InstitutionType type;
     private Set<CareType> careTypes;
 }

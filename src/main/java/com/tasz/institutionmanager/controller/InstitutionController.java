@@ -1,6 +1,7 @@
 package com.tasz.institutionmanager.controller;
 
 import com.tasz.institutionmanager.constants.CareType;
+import com.tasz.institutionmanager.constants.InstitutionType;
 import com.tasz.institutionmanager.contract.InstitutionDetails;
 import com.tasz.institutionmanager.service.InstitutionService;
 import lombok.AllArgsConstructor;
@@ -63,5 +64,15 @@ public class InstitutionController {
     public void deleteCareType(@PathVariable("institution-name") final String institutionName, @RequestBody final Set<CareType> careTypes) {
         log.info("Deleting care type {} from institution {}", careTypes, institutionName);
         institutionService.deleteCareTypes(institutionName, careTypes);
+    }
+
+    @GetMapping(value = "/get-institution-types", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<InstitutionType> getInstitutionTypes() {
+        return List.of(InstitutionType.values());
+    }
+
+    @GetMapping(value = "/get-care-types", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CareType> getCareTypes() {
+        return List.of(CareType.values());
     }
 }

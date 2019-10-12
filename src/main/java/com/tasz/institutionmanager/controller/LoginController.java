@@ -14,14 +14,17 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class LoginController {
     @GetMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, String> login(Authentication authentication) {
+    public Map<String, String> login(Authentication authentication) throws IllegalAccessException {
         final String userName = authentication.getName();
-        final String role = authentication.getAuthorities().toString();
+        final String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalAccessException("No role found"))
+                .getAuthority();
         log.info("Logging in user: {}", userName);
 
         return Map.of(
                 "username", userName,
-                "roleEntity", role
+                "role", role
         );
     }
 }

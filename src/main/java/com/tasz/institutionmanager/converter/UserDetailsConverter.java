@@ -1,5 +1,6 @@
 package com.tasz.institutionmanager.converter;
 
+import com.tasz.institutionmanager.constants.Role;
 import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.model.InstitutionEntity;
 import com.tasz.institutionmanager.model.UserEntity;
@@ -15,6 +16,7 @@ public class UserDetailsConverter implements Converter<UserEntity, UserDetails> 
         final UserDetails userDetails = new UserDetails();
         BeanUtils.copyProperties(userEntity, userDetails);
 
+        userDetails.setRole(Role.valueOf(userEntity.getRoleEntity().getRoleName()));
         userDetails.setInstitutions(userEntity.getInstitutionEntitySet().stream()
                 .map(InstitutionEntity::getName)
                 .collect(Collectors.toList()));

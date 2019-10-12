@@ -1,10 +1,12 @@
 package com.tasz.institutionmanager.controller;
 
+import com.tasz.institutionmanager.constants.Role;
 import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.service.UserAdminService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -15,16 +17,16 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/user")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserAdminController {
 
     private UserAdminService userAdminService;
 
-    @GetMapping(value = "get-users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDetails> getUsers() {
+    @GetMapping(value = "get-users/{page-number}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Page<UserDetails> getUsers(@PathVariable(value = "page-number") final Integer pageNumber) {
         log.info("Getting users list");
-        return userAdminService.getUsers();
+        return userAdminService.getUsers(pageNumber);
     }
 
     @GetMapping(value = "get-user", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,5 +55,10 @@ public class UserAdminController {
         final String userName = authentication.getName();
         log.info("Setting password for user: {}", userName);
         userAdminService.setPassword(userName, password);
+    }
+
+    @GetMapping(value = "get-roles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Role> getRoles() {
+        return List.of(Role.values());
     }
 }

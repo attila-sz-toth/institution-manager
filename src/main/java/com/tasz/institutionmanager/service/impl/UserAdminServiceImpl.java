@@ -11,6 +11,9 @@ import com.tasz.institutionmanager.service.UserAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class UserAdminServiceImpl implements UserAdminService {
 
     private static final int DEFAULT_PASSWORD_LENGTH = 16;
+    private static final int PAGE_SIZE = 5;
 
     private final UserRepository userRepository;
     private final InstitutionRepository institutionRepository;
@@ -34,14 +38,10 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     @Transactional
-    public List<UserDetails> getUsers() {
-        final Iterable<UserEntity> allUsers = userRepository.findAll();
-
-        List<UserEntity> usersList = new ArrayList<>();
-        allUsers.forEach(usersList::add);
-
-        log.info("UserEntity List received: {}", usersList);
-        return userDetailsConverter.convertAll(usersList);
+    public Page<UserDetails> getUsers(final Integer pageNumber) {
+        final Page<UserEntity> userEntities = userRepository.findAll(PageRequest.of(pageNumber, PAGE_SIZE));
+         return userEntities
+                 .map(userDetailsConverter::convert);
     }
 
     @Override
@@ -56,12 +56,12 @@ public class UserAdminServiceImpl implements UserAdminService {
         final String password = generatePassword();
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
-        final UserEntity usersDto = userConverter.convert(userRegistrationDetails);
+        final UserEntity userEntity = userConverter.convert(userRegistrationDetails);
         final String encodedPassword = passwordEncoder.encode(password);
-        usersDto.setPassword(encodedPassword);
+        userEntity.setPassword(encodedPassword);
 
         log.info("Adding new user {} with roleEntity {}", userRegistrationDetails.getUsername(), userRegistrationDetails.getRole());
-        this.userRepository.save(usersDto);
+        this.userRepository.save(userEntity);
     }
 
     @Override
