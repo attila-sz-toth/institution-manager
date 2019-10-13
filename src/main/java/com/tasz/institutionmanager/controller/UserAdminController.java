@@ -2,7 +2,6 @@ package com.tasz.institutionmanager.controller;
 
 import com.tasz.institutionmanager.constants.Role;
 import com.tasz.institutionmanager.contract.UserDetails;
-import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.service.UserAdminService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(value = "/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class UserAdminController {
 
     private UserAdminService userAdminService;
@@ -29,17 +28,17 @@ public class UserAdminController {
         return userAdminService.getUsers(pageNumber);
     }
 
-    @GetMapping(value = "get-user", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDetails getUser(@RequestBody final String username) {
+    @GetMapping(value = "get-user/{user-name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDetails getUser(@PathVariable("user-name") final String username) {
         log.info("Getting user data for user: {}", username);
         return userAdminService.getUser(username);
     }
 
     @PostMapping(value = "add-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void addUser(@RequestBody final UserRegistrationDetails userRegistrationDetails) {
-        log.info("Adding new userRegistrationDetails: {}", userRegistrationDetails.getUsername());
-        userAdminService.addUser(userRegistrationDetails);
+    public void addUser(@RequestBody final UserDetails userDetails) {
+        log.info("Adding new userDetails: {}", userDetails.getUsername());
+        userAdminService.addUser(userDetails);
     }
 
     @PostMapping(value = "delete-user", consumes = MediaType.TEXT_PLAIN_VALUE)

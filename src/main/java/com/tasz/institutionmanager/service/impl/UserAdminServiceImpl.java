@@ -1,7 +1,6 @@
 package com.tasz.institutionmanager.service.impl;
 
 import com.tasz.institutionmanager.contract.UserDetails;
-import com.tasz.institutionmanager.contract.UserRegistrationDetails;
 import com.tasz.institutionmanager.converter.UserConverter;
 import com.tasz.institutionmanager.converter.UserDetailsConverter;
 import com.tasz.institutionmanager.model.UserEntity;
@@ -13,14 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,8 +34,8 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Transactional
     public Page<UserDetails> getUsers(final Integer pageNumber) {
         final Page<UserEntity> userEntities = userRepository.findAll(PageRequest.of(pageNumber, PAGE_SIZE));
-         return userEntities
-                 .map(userDetailsConverter::convert);
+        return userEntities
+                .map(userDetailsConverter::convert);
     }
 
     @Override
@@ -52,7 +46,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     @Transactional
-    public void addUser(final UserRegistrationDetails userRegistrationDetails) {
+    public void addUser(final UserDetails userRegistrationDetails) {
         final String password = generatePassword();
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
 
@@ -76,15 +70,6 @@ public class UserAdminServiceImpl implements UserAdminService {
     public void setPassword(final String userName, final String password) {
         final String encodedPassword = passwordEncoder.encode(password);
         userRepository.setPassword(userName, encodedPassword);
-    }
-
-    @Override
-    @Transactional
-    public void updateInstitutionList(String userName, List<String> institutionList) {
-        final UserEntity userEntity = userRepository.findByUsername(userName);
-        userEntity.setInstitutionEntitySet(institutionList.stream()
-                .map(institutionRepository::findByName)
-                .collect(Collectors.toSet()));
     }
 
     private String generatePassword() {

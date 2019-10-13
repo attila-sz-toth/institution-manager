@@ -28,6 +28,12 @@ public class InstitutionController {
         return institutionService.getInstitutions();
     }
 
+    @GetMapping(value = "/get-institution-names", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<String> getInstitutionNames() {
+        log.info("Getting institution names");
+        return institutionService.getInstitutionNames();
+    }
+
     @GetMapping(value = "/get-institution-details/{institution-name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public InstitutionDetails getInstitutionDetails(@PathVariable("institution-name") final String institutionName) {
         log.info("Getting institution details of {}", institutionName);

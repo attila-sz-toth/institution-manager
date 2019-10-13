@@ -1,27 +1,27 @@
 package com.tasz.institutionmanager.converter;
 
-import com.tasz.institutionmanager.contract.UserRegistrationDetails;
+import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.model.UserEntity;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 @Component
 @AllArgsConstructor
-public class UserConverter implements Converter<UserRegistrationDetails, UserEntity> {
+public class UserConverter implements Converter<UserDetails, UserEntity> {
 
     private final RoleRepository roleRepository;
     private final InstitutionRepository institutionRepository;
 
     @Override
-    public UserEntity convert(UserRegistrationDetails from) {
+    public UserEntity convert(UserDetails userDetails) {
         final UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(from.getUsername());
-        userEntity.setRoleEntity(roleRepository.findByRoleName(from.getRole()));
-        userEntity.setInstitutionEntitySet(Set.of(institutionRepository.findByName(from.getInstitutionName())));
+        BeanUtils.copyProperties(userDetails, userEntity);
+
+        userEntity.setRoleEntity(roleRepository.findByRoleName(userDetails.getRole().name()));
+        userEntity.setInstitutionEntity(institutionRepository.findByName(userDetails.getInstitution()));
 
         return userEntity;
     }

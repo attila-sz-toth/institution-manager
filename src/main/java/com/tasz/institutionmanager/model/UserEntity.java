@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "institutionm")
@@ -24,6 +23,9 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "password")
     private String password;
 
@@ -31,9 +33,7 @@ public class UserEntity {
     @JoinColumn(name = "role_id")
     private RoleEntity roleEntity;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "institutions_to_users", schema = "institutionm",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "institution_id"))
-    private Set<InstitutionEntity> institutionEntitySet;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "institution_id")
+    private InstitutionEntity institutionEntity;
 }

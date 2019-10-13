@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 public class InstitutionEntity {
     @Id
-    @SequenceGenerator(name = "institution_id_generator", sequenceName = "seq_institution_id", allocationSize = 1)
+    @SequenceGenerator(name = "institution_id_generator", schema = "institutionm", sequenceName = "seq_institution_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "institution_id_generator")
     @Column(name = "id")
     private Integer id;

@@ -1,14 +1,21 @@
 package com.tasz.institutionmanager.constants;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
-@AllArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Getter
 public enum Role {
     ADMIN(0, "Adminisztrátor"),
     EMPLOYEE(1, "Alkalmazott");
 
-    private Integer id;
-    private String description;
+    Role(Integer id, String description) {
+        this.id = id;
+        this.value = name();
+        this.description = description;
+    }
+
+    private final Integer id;
+    private final String value;
+    private final String description;
 }

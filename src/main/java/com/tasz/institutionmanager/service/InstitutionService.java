@@ -9,6 +9,8 @@ import java.util.Set;
 public interface InstitutionService {
     List<InstitutionDetails> getInstitutions();
 
+    List<String> getInstitutionNames();
+
     InstitutionDetails getInstitutionDetails(final String institutionName);
 
     void addInstitution(final InstitutionDetails institutionDetails);
@@ -20,4 +22,5 @@ public interface InstitutionService {
     void addCareTypes(final String institutionName, final Set<CareType> careTypes);
 
     void deleteCareTypes(final String institutionName, final Set<CareType> careTypes);
+
 }

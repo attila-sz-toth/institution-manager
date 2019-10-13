@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -30,6 +31,13 @@ public class InstitutionServiceImpl implements InstitutionService {
     public List<InstitutionDetails> getInstitutions() {
         final List<InstitutionEntity> institutionEntities = institutionRepository.findAll();
         return institutionDetailsConverter.convertAll(institutionEntities);
+    }
+
+    @Override
+    public List<String> getInstitutionNames() {
+        return getInstitutions().stream()
+                .map(InstitutionDetails::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
