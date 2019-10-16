@@ -4,8 +4,8 @@ import com.tasz.institutionmanager.contract.UserDetails;
 import com.tasz.institutionmanager.converter.UserConverter;
 import com.tasz.institutionmanager.converter.UserDetailsConverter;
 import com.tasz.institutionmanager.model.UserEntity;
-import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.UserRepository;
+import com.tasz.institutionmanager.service.MessagingService;
 import com.tasz.institutionmanager.service.UserAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +25,10 @@ public class UserAdminServiceImpl implements UserAdminService {
     private static final int PAGE_SIZE = 5;
 
     private final UserRepository userRepository;
-    private final InstitutionRepository institutionRepository;
     private final UserConverter userConverter;
     private final UserDetailsConverter userDetailsConverter;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final MessagingService messagingService;
 
     @Override
     @Transactional
@@ -49,6 +49,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     public void addUser(final UserDetails userRegistrationDetails) {
         final String password = generatePassword();
         log.info("Password generated for user {} : {}", userRegistrationDetails.getUsername(), password);
+        messagingService.sendPassword(userRegistrationDetails.getUsername(), password);
 
         final UserEntity userEntity = userConverter.convert(userRegistrationDetails);
         final String encodedPassword = passwordEncoder.encode(password);

@@ -2,6 +2,7 @@ package com.tasz.institutionmanager.controller;
 
 import com.tasz.institutionmanager.contract.CareReceiverDetails;
 import com.tasz.institutionmanager.contract.PersonalDetailsCompositeKey;
+import com.tasz.institutionmanager.serializer.DateSerializer;
 import com.tasz.institutionmanager.service.CareReceiverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @Slf4j
 @AllArgsConstructor
@@ -67,8 +70,19 @@ public class CareReceiverController {
         return careReceiverService.getCareReceiversByLastName(pageNumber, lastName);
     }
 
-    @GetMapping(value = "/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public CareReceiverDetails getCareReceiver(@RequestBody final PersonalDetailsCompositeKey compositeKey) {
+    @GetMapping(value = "/get/{first-name}/{last-name}/{mothers-name}/{birth-date}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CareReceiverDetails getCareReceiver(
+            @PathVariable("first-name") final String firstName,
+            @PathVariable("last-name") final String lastName,
+            @PathVariable("mothers-name") final String mothersName,
+            @PathVariable("birth-date") final String birthDate) throws ParseException {
+
+        final PersonalDetailsCompositeKey compositeKey = new PersonalDetailsCompositeKey();
+        compositeKey.setFirstName(firstName);
+        compositeKey.setLastName(lastName);
+        compositeKey.setMothersName(mothersName);
+        compositeKey.setBirthDate(DateSerializer.dateFormat.parse(birthDate));
+
         log.info("Getting care receiver {}", compositeKey);
         return careReceiverService.getCareReceiver(compositeKey);
     }

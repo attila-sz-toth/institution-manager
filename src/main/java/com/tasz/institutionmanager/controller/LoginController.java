@@ -1,5 +1,9 @@
 package com.tasz.institutionmanager.controller;
 
+import com.tasz.institutionmanager.constants.Role;
+import com.tasz.institutionmanager.contract.UserDetails;
+import com.tasz.institutionmanager.service.UserAdminService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -11,8 +15,12 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
+@AllArgsConstructor
 public class LoginController {
+
+    private UserAdminService userAdminService;
+
     @GetMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> login(Authentication authentication) throws IllegalAccessException {
         final String userName = authentication.getName();
@@ -22,9 +30,19 @@ public class LoginController {
                 .getAuthority();
         log.info("Logging in user: {}", userName);
 
-        return Map.of(
-                "username", userName,
-                "role", role
-        );
+        if (Role.valueOf(role) == Role.EMPLOYEE) {
+            final UserDetails user = userAdminService.getUser(userName);
+            return Map.of(
+                    "username", userName,
+                    "role", role,
+                    "institution", user.getInstitution()
+            );
+
+        } else {
+            return Map.of(
+                    "username", userName,
+                    "role", role
+            );
+        }
     }
 }
