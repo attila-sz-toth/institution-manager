@@ -1,5 +1,6 @@
 package com.tasz.institutionmanager.controller;
 
+import com.tasz.institutionmanager.constants.Sex;
 import com.tasz.institutionmanager.contract.CareReceiverDetails;
 import com.tasz.institutionmanager.contract.PersonalDetailsCompositeKey;
 import com.tasz.institutionmanager.serializer.DateSerializer;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -105,5 +107,10 @@ public class CareReceiverController {
     public void deleteCareReceiver(@RequestBody final PersonalDetailsCompositeKey compositeKey) {
         log.info("Deleting care receiver {}", compositeKey);
         careReceiverService.deleteCareReceiver(compositeKey);
+    }
+
+    @GetMapping(value = "/get-sexes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Sex> getCareTypes() {
+        return List.of(Sex.values());
     }
 }
