@@ -23,7 +23,7 @@ public interface CareReceiverService {
 
     void addCareReceiver(final CareReceiverDetails careReceiverDetails);
 
-    void updateCareReceiver(final CareReceiverDetails careReceiverDetails);
+    void updateCareReceiver(final PersonalDetailsCompositeKey key, final CareReceiverDetails careReceiverDetails);
 
     void deleteCareReceiver(final PersonalDetailsCompositeKey compositeKey);
 }

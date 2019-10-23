@@ -12,6 +12,7 @@ import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.service.CareReceiverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,7 +42,8 @@ public class CareReceiverServiceImpl implements CareReceiverService {
     @Override
     public Page<CareReceiverDetails> getCareReceiversByInstitution(final Integer pageNumber, final String institutionName) {
         final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
-        return careReceiverRepository.findAllByInstitutionEntity(institutionEntity, PageRequest.of(pageNumber, PAGE_SIZE, DEFAULT_SORTING))
+        return careReceiverRepository.findAllByInstitutionEntityAndCareStatus(institutionEntity,
+                PageRequest.of(pageNumber, PAGE_SIZE, DEFAULT_SORTING), CareStatus.ACTIVE)
                 .map(careReceiverConverter::convert);
     }
 
@@ -98,8 +100,20 @@ public class CareReceiverServiceImpl implements CareReceiverService {
 
     @Override
     @Transactional
-    public void updateCareReceiver(CareReceiverDetails careReceiverDetails) {
-        careReceiverRepository.save(careReceiverEntityConverter.convert(careReceiverDetails));
+    public void updateCareReceiver(final PersonalDetailsCompositeKey key, final CareReceiverDetails careReceiverDetails) {
+        final CareReceiverEntity careReceiverEntity = careReceiverRepository.findByFirstNameAndLastNameAndMothersNameAndBirthDate(
+                key.getFirstName(),
+                key.getLastName(),
+                key.getMothersName(),
+                key.getBirthDate()
+        );
+
+        BeanUtils.copyProperties(careReceiverDetails, careReceiverEntity);
+        final InstitutionEntity institutionEntity =
+                institutionRepository.findByName(careReceiverDetails.getInstitutionName());
+        careReceiverEntity.setInstitutionEntity(institutionEntity);
+
+        careReceiverRepository.save(careReceiverEntity);
     }
 
     @Override

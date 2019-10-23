@@ -38,7 +38,5 @@ public class InstitutionEntity {
 
     @OneToMany(mappedBy = "institutionEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CareReceiverEntity> careReceiverEntities = new HashSet<>();
-
-//    @ManyToMany(mappedBy = "institutionEntitySet")
-//    private Set<UserEntity> userList;
+    
 }

@@ -21,8 +21,8 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) {
         final UserEntity userEntity = this.userRepository.findByUsername(userName);
         if (userEntity == null) {
-            log.info("UserRegistrationDetails not found: {}", userName);
-            throw new UsernameNotFoundException("UserRegistrationDetails not found: " + userName);
+            log.info("UserEntity not found for: {}", userName);
+            throw new UsernameNotFoundException("User Entity not found: " + userName);
         }
 
         return new MyUserPrincipal(userEntity);

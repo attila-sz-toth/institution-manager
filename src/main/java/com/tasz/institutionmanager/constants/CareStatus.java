@@ -7,5 +7,5 @@ public enum CareStatus {
     ACTIVE,
     SUSPENDED,
     WAITING,
-    TERMINATED;
+    TERMINATED
 }
