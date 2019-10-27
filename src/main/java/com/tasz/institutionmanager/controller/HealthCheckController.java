@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class HealthCheckController {
     @GetMapping(value = "/health-check", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> healthCheck() {

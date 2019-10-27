@@ -13,13 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping("/care-receiver")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class CareReceiverController {
 
     private CareReceiverService careReceiverService;
@@ -133,5 +135,41 @@ public class CareReceiverController {
     @GetMapping(value = "/get-sexes", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sex> getCareTypes() {
         return List.of(Sex.values());
+    }
+
+    @GetMapping(value = "/count-care-receivers/{institution-name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Integer countCareReceivers(@PathVariable("institution-name") final String institutionName) {
+        log.info("Count care receivers of institute {}", institutionName);
+        return careReceiverService.countCareReceiversByInstitution(institutionName);
+    }
+
+    @GetMapping(value = "/count-waiting-list/{institution-name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Integer countWaitingList(@PathVariable("institution-name") final String institutionName) {
+        log.info("Get waiting list size of institute {}", institutionName);
+        return careReceiverService.countWaitingListByInstitution(institutionName);
+    }
+
+    @GetMapping(value = "/count-archive/{institution-name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Integer countArchive(@PathVariable("institution-name") final String institutionName) {
+        log.info("Get archive size of institute {}", institutionName);
+        return careReceiverService.countArchiveByInstitution(institutionName);
+    }
+
+    @GetMapping(value = "/count-care-receivers-date/{institution-name}/{from-date}/{to-date}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Integer> countCareReceiversByDate(@PathVariable("institution-name") final String institutionName,
+                                                         @PathVariable("from-date") final String fromDateString,
+                                                         @PathVariable("to-date") final String toDateString) throws ParseException {
+
+        log.info("Get number of care receivers of institute {} from {} to {}", institutionName, fromDateString, toDateString);
+        final Integer count = careReceiverService.countCareReceiversByInstitutionInTimeRange(institutionName, fromDateString, toDateString);
+        return Collections.singletonMap("count", count);
+    }
+
+    @GetMapping(value = "/normative-year/{institution-name}/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Integer> normativeByYear(@PathVariable("institution-name") final String institutionName,
+                                                @PathVariable("date") final String dateString) throws ParseException {
+        log.info("Get yearly normative of institute {} for year {}", institutionName, dateString);
+        final Integer count = careReceiverService.normativeByInstitutionAndYear(institutionName, dateString);
+        return Collections.singletonMap("count", count);
     }
 }

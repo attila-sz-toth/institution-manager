@@ -11,9 +11,7 @@ import java.util.Date;
 
 @Data
 public class PersonalDetails {
-    private String title;
     private String firstName;
-    private String middleName;
     private String lastName;
     private String mothersName;
     @JsonSerialize(using = DateSerializer.class)

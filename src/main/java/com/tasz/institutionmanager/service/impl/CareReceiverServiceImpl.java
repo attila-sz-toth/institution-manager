@@ -7,8 +7,11 @@ import com.tasz.institutionmanager.converter.CareReceiverConverter;
 import com.tasz.institutionmanager.converter.CareReceiverEntityConverter;
 import com.tasz.institutionmanager.model.CareReceiverEntity;
 import com.tasz.institutionmanager.model.InstitutionEntity;
+import com.tasz.institutionmanager.model.NormativeEntity;
 import com.tasz.institutionmanager.repository.CareReceiverRepository;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
+import com.tasz.institutionmanager.repository.NormativeRepository;
+import com.tasz.institutionmanager.serializer.DateSerializer;
 import com.tasz.institutionmanager.service.CareReceiverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Set;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @Slf4j
@@ -30,6 +41,7 @@ public class CareReceiverServiceImpl implements CareReceiverService {
 
     private final InstitutionRepository institutionRepository;
     private final CareReceiverRepository careReceiverRepository;
+    private final NormativeRepository normativeRepository;
     private final CareReceiverConverter careReceiverConverter;
     private final CareReceiverEntityConverter careReceiverEntityConverter;
 
@@ -118,8 +130,73 @@ public class CareReceiverServiceImpl implements CareReceiverService {
 
     @Override
     @Transactional
-    public void deleteCareReceiver(PersonalDetailsCompositeKey compositeKey) {
+    public void deleteCareReceiver(final PersonalDetailsCompositeKey compositeKey) {
         careReceiverRepository.deleteByFirstNameAndLastNameAndMothersNameAndBirthDate(compositeKey.getFirstName(),
                 compositeKey.getLastName(), compositeKey.getMothersName(), compositeKey.getBirthDate());
+    }
+
+    @Override
+    public Integer countCareReceiversByInstitution(final String institutionName) {
+        final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
+        return careReceiverRepository.countByInstitutionEntityAndCareStatus(institutionEntity, CareStatus.ACTIVE);
+    }
+
+    @Override
+    public Integer countWaitingListByInstitution(final String institutionName) {
+        final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
+        return careReceiverRepository.countByInstitutionEntityAndCareStatus(institutionEntity, CareStatus.WAITING);
+    }
+
+    @Override
+    public Integer countArchiveByInstitution(final String institutionName) {
+        final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
+        return careReceiverRepository.countByInstitutionEntityAndCareStatus(institutionEntity, CareStatus.TERMINATED);
+    }
+
+    @Override
+    public Integer countCareReceiversByInstitutionInTimeRange(final String institutionName, final String fromDateString,
+                                                              final String toDateString) throws ParseException {
+        final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
+        final Date fromDate = DateSerializer.dateFormat.parse(fromDateString);
+        final Date toDate = DateSerializer.dateFormat.parse(toDateString);
+
+        return careReceiverRepository.countCareReceiversByInstitutionInTimeRange(institutionEntity, fromDate, toDate);
+    }
+
+    @Override
+    public Integer normativeByInstitutionAndYear(final String institutionName, final String year) throws ParseException {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final Date fromDate = dateFormat.parse(year + "-01-01");
+        final Date toDate = dateFormat.parse(year + "-12-31");
+
+        final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
+        final NormativeEntity normativeEntity = normativeRepository.findByInstitutionEntityAndYear(institutionEntity, year);
+        final Integer normative = null != normativeEntity ? normativeEntity.getAmount() : 0;
+
+        final Set<CareReceiverEntity> receivers
+                = careReceiverRepository.findCareReceiversByInstitutionInTimeRange(institutionEntity, fromDate, toDate);
+
+        final Integer careDays = receivers.stream()
+                .map(careReceiver -> DAYS.between(getStartInstant(careReceiver, fromDate), getEndInstant(careReceiver, toDate)))
+                .mapToInt(Long::intValue)
+                .sum();
+
+        return normative * careDays;
+    }
+
+    private Instant getStartInstant(final CareReceiverEntity careReceiver, final Date fromDate) {
+        final Date startOfCare = careReceiver.getStartOfCare();
+        final Date startDate = null != startOfCare && fromDate.compareTo(startOfCare) <= 0 ?
+                startOfCare :
+                fromDate;
+        return startDate.toInstant();
+    }
+
+    private Instant getEndInstant(final CareReceiverEntity careReceiver, final Date toDate) {
+        final Date endOfCare = careReceiver.getEndOfCare();
+        final Date endDate = null != endOfCare && toDate.compareTo(endOfCare) < 0 ?
+                endOfCare :
+                toDate;
+        return endDate.toInstant();
     }
 }

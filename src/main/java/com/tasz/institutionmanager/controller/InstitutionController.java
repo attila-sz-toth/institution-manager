@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/institutions")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class InstitutionController {
 
     private InstitutionService institutionService;
