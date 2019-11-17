@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Slf4j
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class MyUserPrincipal implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         final SimpleGrantedAuthority role = new SimpleGrantedAuthority(userEntity.getRoleEntity().getRoleName());
 
-        return List.of(role);
+        return Collections.singletonList(role);
     }
 
     @Override

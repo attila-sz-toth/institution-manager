@@ -1,5 +1,5 @@
-CREATE INDEX IDX_USERS_USERNAME
-  ON USERS (USERNAME);
+create index idx_users_username
+  on institution_manager.users (username);
 
-CREATE INDEX IDX_PERSONAL_DETAILS
-  ON PERSONAL_DETAILS (FIRST_NAME, LAST_NAME, BIRTH_DATE, MOTHERS_NAME);
+create index idx_personal_details
+  on institution_manager.personal_details (first_name, last_name, birth_date, mothers_name);

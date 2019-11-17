@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "personal_details", schema = "institutionm")
+@Table(name = "personal_details", schema = "institution_manager")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,7 +20,7 @@ public class PersonalDetailsEntity {
     @Id
     @SequenceGenerator(
             name = "personal_details_id_generator",
-            schema = "institutionm",
+            schema = "institution_manager",
             sequenceName = "seq_personal_details_id",
             allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personal_details_id_generator")

@@ -12,8 +12,8 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/normative")
 @CrossOrigin
+@RequestMapping("/normative")
 public class NormativeController {
     private final NormativeService normativeService;
 

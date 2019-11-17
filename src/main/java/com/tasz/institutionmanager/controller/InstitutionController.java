@@ -10,14 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/institutions")
 @CrossOrigin
+@RequestMapping("/institutions")
 public class InstitutionController {
 
     private InstitutionService institutionService;
@@ -74,11 +75,11 @@ public class InstitutionController {
 
     @GetMapping(value = "/get-institution-types", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<InstitutionType> getInstitutionTypes() {
-        return List.of(InstitutionType.values());
+        return Arrays.asList(InstitutionType.values());
     }
 
     @GetMapping(value = "/get-care-types", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CareType> getCareTypes() {
-        return List.of(CareType.values());
+        return Arrays.asList(CareType.values());
     }
 }

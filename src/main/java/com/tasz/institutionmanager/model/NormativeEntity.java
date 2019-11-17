@@ -8,14 +8,14 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "normative", schema = "institutionm")
+@Table(name = "normative", schema = "institution_manager")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class NormativeEntity {
     @Id
-    @SequenceGenerator(name = "normative_id_generator", sequenceName = "institutionm.seq_normative_id", allocationSize = 1)
+    @SequenceGenerator(name = "normative_id_generator", sequenceName = "institution_manager.seq_normative_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "normative_id_generator")
     @Column(name = "id")
     private Integer id;

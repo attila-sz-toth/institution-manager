@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roles", schema = "institutionm")
+@Table(name = "roles", schema = "institution_manager")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

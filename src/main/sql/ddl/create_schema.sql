@@ -1,2 +1,2 @@
-CREATE SCHEMA INSTITUTION_MANAGER
-  AUTHORIZATION INSTITUTIONMADMIN;
+create schema institution_manager
+  authorization institutionadmin;

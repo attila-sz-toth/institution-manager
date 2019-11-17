@@ -19,6 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) {
+
         final UserEntity userEntity = this.userRepository.findByUsername(userName);
         if (userEntity == null) {
             log.info("UserEntity not found for: {}", userName);

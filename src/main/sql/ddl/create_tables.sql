@@ -1,115 +1,123 @@
-CREATE TABLE IF NOT EXISTS ROLES (
-  ID   INTEGER      NOT NULL,
-  ROLE VARCHAR(255) NOT NULL,
-  PRIMARY KEY (ID)
+create table institution_manager.roles
+(
+  id        integer      not null
+    constraint roles_pkey
+    primary key,
+  role_name varchar(255) not null
 );
 
-CREATE TABLE IF NOT EXISTS SEX (
-  ID  INTEGER      NOT NULL,
-  SEX VARCHAR(255) NOT NULL,
-  PRIMARY KEY (ID)
+alter table institution_manager.roles
+  owner to institutionadmin;
+
+create table institution_manager.institutions
+(
+  id      integer      not null
+    constraint institutions_pkey
+    primary key,
+  name    varchar(255) not null,
+  type    varchar(255) not null,
+  address varchar(255) not null
 );
 
-CREATE TABLE IF NOT EXISTS INSTITUTION_TYPES (
-  ID   INTEGER NOT NULL,
-  TYPE VARCHAR(255),
-  PRIMARY KEY (ID)
+alter table institution_manager.institutions
+  owner to institutionadmin;
+
+create table institution_manager.users
+(
+  id             integer      not null
+    constraint users_pkey
+    primary key,
+  username       varchar(255) not null
+    constraint users_username_key
+    unique,
+  password       varchar(255),
+  role_id        integer      not null
+    constraint users_role_id_fkey
+    references institution_manager.roles,
+  name           varchar(255),
+  institution_id integer
+    constraint users_institutions_id_fk
+    references institution_manager.institutions
 );
 
-CREATE TABLE IF NOT EXISTS CARE_STATUS (
-  ID          INTEGER NOT NULL,
-  CARE_STATUS VARCHAR(255),
-  PRIMARY KEY (ID)
+alter table institution_manager.users
+  owner to institutionadmin;
+
+create unique index institutions_name_uindex
+  on institution_manager.institutions (name);
+
+create table institution_manager.personal_details
+(
+  id           integer      not null
+    constraint personal_details_pkey
+    primary key,
+  first_name   varchar(255) not null,
+  last_name    varchar(255) not null,
+  mothers_name varchar(255) not null,
+  birth_date   date         not null,
+  birth_name   varchar(255) not null,
+  birth_place  varchar(255) not null,
+  sex          varchar(255) not null,
+  address      varchar(255) not null,
+  phone_number varchar(16),
+  email        varchar(255),
+  constraint personal_details_first_name_last_name_mothers_name_birth_da_key
+  unique (first_name, last_name, mothers_name, birth_date)
 );
 
-CREATE TABLE IF NOT EXISTS RELATIONSHIPS (
-  ID           INTEGER NOT NULL,
-  RELATIONSHIP VARCHAR(255),
-  PRIMARY KEY (ID)
+alter table institution_manager.personal_details
+  owner to institutionadmin;
+
+create index idx_personal_details
+  on institution_manager.personal_details (first_name, last_name, birth_date, mothers_name);
+
+create table institution_manager.care_receiver
+(
+  personal_details_id integer not null
+    constraint care_receiver_pkey
+    primary key
+    constraint care_receiver_personal_details_id_fkey
+    references institution_manager.personal_details,
+  care_status         varchar(255),
+  taj                 integer,
+  start_of_care       date,
+  end_of_care         date,
+  institution_id      integer not null
+    constraint care_receiver_institutions_id_fk
+    references institution_manager.institutions
 );
 
-CREATE TABLE IF NOT EXISTS USERS (
-  ID       INTEGER      NOT NULL,
-  USERNAME VARCHAR(255) NOT NULL UNIQUE,
-  PASSWORD VARCHAR(255),
-  ROLE_ID  INTEGER      NOT NULL REFERENCES ROLES (ID),
-  PRIMARY KEY (ID)
+alter table institution_manager.care_receiver
+  owner to institutionadmin;
+
+create table institution_manager.institution_care_types
+(
+  id             integer not null
+    constraint institution_care_types_pkey
+    primary key,
+  institution_id integer not null
+    constraint institution_care_types_institution_id_fkey
+    references institution_manager.institutions,
+  care_type      varchar(255)
 );
 
-CREATE TABLE IF NOT EXISTS INSTITUTIONS (
-  ID      INTEGER      NOT NULL,
-  NAME    VARCHAR(255) NOT NULL UNIQUE,
-  ADDRESS VARCHAR(255) NOT NULL,
-  TYPE    VARCHAR(255) NOT NULL,
-  PRIMARY KEY (ID)
+alter table institution_manager.institution_care_types
+  owner to institutionadmin;
+
+create table institution_manager.normative
+(
+  id             integer    not null
+    constraint normative_pk
+    primary key,
+  institution_id integer    not null
+    constraint normative_institutions_id_fk
+    references institution_manager.institutions,
+  year           varchar(4) not null,
+  amount         integer    not null
 );
 
+alter table institution_manager.normative
+  owner to institutionadmin;
 
-DROP TABLE INSTITUTION_CARE_TYPES;
-CREATE TABLE IF NOT EXISTS INSTITUTION_CARE_TYPES (
-  ID             INTEGER NOT NULL UNIQUE,
-  INSTITUTION_ID INTEGER NOT NULL REFERENCES INSTITUTIONS (ID),
-  CARE_TYPE      VARCHAR(255),
-  PRIMARY KEY (ID)
-);
-
-CREATE TABLE IF NOT EXISTS INSTITUTIONS_TO_USERS (
-  INSTITUTION_ID INTEGER NOT NULL REFERENCES INSTITUTIONS (ID),
-  USER_ID        INTEGER NOT NULL REFERENCES USERS (ID),
-  PRIMARY KEY (INSTITUTION_ID, USER_ID)
-);
-
-CREATE TABLE IF NOT EXISTS PERSONAL_DETAILS (
-  ID           INTEGER      NOT NULL,
-  TITLE        VARCHAR(16),
-  FIRST_NAME   VARCHAR(255) NOT NULL,
-  MIDDLE_NAME  VARCHAR(255),
-  LAST_NAME    VARCHAR(255) NOT NULL,
-  MOTHERS_NAME VARCHAR(255) NOT NULL,
-  BIRTH_DATE   DATE         NOT NULL,
-  BIRTH_NAME   VARCHAR(255) NOT NULL,
-  BIRTH_PLACE  VARCHAR(255) NOT NULL,
-  SEX          INTEGER      NOT NULL REFERENCES SEX (ID),
-  ADDRESS      VARCHAR(255) NOT NULL,
-  PHONE_NUMBER VARCHAR(16),
-  EMAIL        VARCHAR(255),
-  PRIMARY KEY (ID),
-  UNIQUE (FIRST_NAME, LAST_NAME, MOTHERS_NAME, BIRTH_DATE)
-);
-
-CREATE TABLE IF NOT EXISTS FOSTER_CHILDREN_TO_PARENTS (
-  CHILD_ID  INTEGER NOT NULL REFERENCES PERSONAL_DETAILS (ID),
-  PARENT_ID INTEGER NOT NULL REFERENCES PERSONAL_DETAILS (ID),
-  PRIMARY KEY (CHILD_ID, PARENT_ID)
-);
-
-CREATE TABLE IF NOT EXISTS CARE_RECEIVER (
-  PERSONAL_DETAILS_ID INTEGER REFERENCES PERSONAL_DETAILS (ID),
-  CARE_STATUS         INTEGER REFERENCES CARE_STATUS (ID),
-  TAJ                 INTEGER,
-  START_OF_CARE       DATE,
-  END_OF_CARE         DATE,
-  PRIMARY KEY (PERSONAL_DETAILS_ID)
-);
-
-CREATE TABLE IF NOT EXISTS INSTITUTIONS_TO_CARE_RECEIVERS (
-  INSTITUTION_ID   INTEGER NOT NULL REFERENCES INSTITUTIONS (ID),
-  CARE_RECEIVER_ID INTEGER NOT NULL REFERENCES CARE_RECEIVER (PERSONAL_DETAILS_ID),
-  PRIMARY KEY (INSTITUTION_ID, CARE_RECEIVER_ID)
-);
-
-CREATE TABLE IF NOT EXISTS INSTITUTIONS_TO_FOSTER_PARENTS (
-  INSTITUTION_ID   INTEGER NOT NULL REFERENCES INSTITUTIONS (ID),
-  FOSTER_PARENT_ID INTEGER NOT NULL REFERENCES PERSONAL_DETAILS (ID),
-  PRIMARY KEY (INSTITUTION_ID, FOSTER_PARENT_ID)
-);
-
-
-CREATE TABLE IF NOT EXISTS CARE_RECEIVERS_TO_RELATIVES (
-  CARE_RECEIVER_ID INTEGER NOT NULL REFERENCES CARE_RECEIVER (PERSONAL_DETAILS_ID),
-  RELATIVE_ID      INTEGER NOT NULL REFERENCES PERSONAL_DETAILS (ID),
-  RELATIONSHIP     INTEGER REFERENCES RELATIONSHIPS (ID),
-  PRIMARY KEY (CARE_RECEIVER_ID, RELATIVE_ID)
-);
-
-
+create unique index normative_id_uindex
+  on institution_manager.normative (id);

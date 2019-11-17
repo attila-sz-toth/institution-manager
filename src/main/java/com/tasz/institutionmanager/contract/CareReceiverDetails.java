@@ -6,11 +6,13 @@ import com.tasz.institutionmanager.constants.CareStatus;
 import com.tasz.institutionmanager.serializer.DateDeserializer;
 import com.tasz.institutionmanager.serializer.DateSerializer;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class CareReceiverDetails extends PersonalDetails {
     private CareStatus careStatus;
     private String institutionName;

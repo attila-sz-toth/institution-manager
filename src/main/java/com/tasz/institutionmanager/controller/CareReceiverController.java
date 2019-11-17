@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,8 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/care-receiver")
 @CrossOrigin
+@RequestMapping("/care-receiver")
 public class CareReceiverController {
 
     private CareReceiverService careReceiverService;
@@ -134,7 +135,7 @@ public class CareReceiverController {
 
     @GetMapping(value = "/get-sexes", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sex> getCareTypes() {
-        return List.of(Sex.values());
+        return Arrays.asList(Sex.values());
     }
 
     @GetMapping(value = "/count-care-receivers/{institution-name}", produces = MediaType.APPLICATION_JSON_VALUE)

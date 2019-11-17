@@ -1,11 +1,11 @@
-CREATE SEQUENCE SEQ_USER_ID
-  START 1;
+create sequence seq_user_id
+  start 1;
 
-CREATE SEQUENCE SEQ_PERSONAL_DATA_ID
-  START 1;
+create sequence seq_personal_data_id
+  start 1;
 
-CREATE SEQUENCE SEQ_INSTITUTION_ID
-  START 1;
+create sequence seq_institution_id
+  start 1;
 
-CREATE SEQUENCE SEQ_INSTITUTION_CARE_TYPE_ID
-  START 1;
+create sequence seq_institution_care_type_id
+  start 1;

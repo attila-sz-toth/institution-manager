@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -30,19 +31,13 @@ public class LoginController {
                 .getAuthority();
         log.info("Logging in user: {}", userName);
 
+        final HashMap<String, String> response = new HashMap<>();
+        response.put("username", userName);
+        response.put("role", role);
         if (Role.valueOf(role) == Role.EMPLOYEE) {
             final UserDetails user = userAdminService.getUser(userName);
-            return Map.of(
-                    "username", userName,
-                    "role", role,
-                    "institution", user.getInstitution()
-            );
-
-        } else {
-            return Map.of(
-                    "username", userName,
-                    "role", role
-            );
+            response.put("institution", user.getInstitution());
         }
+        return response;
     }
 }

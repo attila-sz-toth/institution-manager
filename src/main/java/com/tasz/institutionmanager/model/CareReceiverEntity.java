@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "care_receiver", schema = "institutionm")
+@Table(name = "care_receiver", schema = "institution_manager")
 @PrimaryKeyJoinColumn(name = "personal_details_id")
 @NoArgsConstructor
 @AllArgsConstructor

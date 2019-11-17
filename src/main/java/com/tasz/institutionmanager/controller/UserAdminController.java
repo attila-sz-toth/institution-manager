@@ -11,13 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = "/user")
 @CrossOrigin
+@RequestMapping(value = "/user")
 public class UserAdminController {
 
     private UserAdminService userAdminService;
@@ -58,6 +59,6 @@ public class UserAdminController {
 
     @GetMapping(value = "get-roles", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Role> getRoles() {
-        return List.of(Role.values());
+        return Arrays.asList(Role.values());
     }
 }

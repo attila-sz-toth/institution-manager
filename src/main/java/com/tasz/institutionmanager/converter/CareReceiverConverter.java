@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CareReceiverConverter implements Converter<CareReceiverEntity, CareReceiverDetails> {
+
     @Override
     public CareReceiverDetails convert(CareReceiverEntity careReceiverEntity) {
         final CareReceiverDetails careReceiverDetails = new CareReceiverDetails();
