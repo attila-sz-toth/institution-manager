@@ -17,7 +17,7 @@ public class MessagingServiceImpl implements MessagingService {
         final SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Institution Manager - Új felhasználó");
-        message.setText(password);
+        message.setText("Bejelentkezési jelszava: " + password);
         emailSender.send(message);
     }
 }

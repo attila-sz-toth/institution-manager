@@ -35,8 +35,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @AllArgsConstructor
 public class CareReceiverServiceImpl implements CareReceiverService {
 
-    private static final int PAGE_SIZE = 5;
-    private static final Sort DEFAULT_SORTING =
+    static final int PAGE_SIZE = 5;
+    static final Sort DEFAULT_SORTING =
             new Sort(Sort.Direction.ASC, "lastName", "firstName");
 
     private final InstitutionRepository institutionRepository;

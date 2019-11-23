@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 public class InstitutionDetailsConverter implements Converter<InstitutionEntity, InstitutionDetails> {
     @Override
     public InstitutionDetails convert(InstitutionEntity institutionEntity) {
+        if (institutionEntity == null) {
+            return null;
+        }
+        
         final InstitutionDetails institutionDetails = new InstitutionDetails();
         BeanUtils.copyProperties(institutionEntity, institutionDetails);
 

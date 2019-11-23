@@ -10,6 +10,10 @@ public class CareReceiverConverter implements Converter<CareReceiverEntity, Care
 
     @Override
     public CareReceiverDetails convert(CareReceiverEntity careReceiverEntity) {
+        if (null == careReceiverEntity) {
+            return null;
+        }
+
         final CareReceiverDetails careReceiverDetails = new CareReceiverDetails();
         BeanUtils.copyProperties(careReceiverEntity, careReceiverDetails);
 

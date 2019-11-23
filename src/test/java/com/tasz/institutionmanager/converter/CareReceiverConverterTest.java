@@ -10,8 +10,10 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static com.tasz.institutionmanager.TestDataProvider.getCareReceiverEntity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 
 public class CareReceiverConverterTest {
@@ -20,44 +22,36 @@ public class CareReceiverConverterTest {
     private final InstitutionEntity institutionEntity = new InstitutionEntity();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         institutionEntity.setName("institution-name");
     }
 
     @Test
-    public void convert() {
-        final CareReceiverEntity entity = new CareReceiverEntity();
-        entity.setAddress("address");
-        entity.setBirthDate(now);
-        entity.setBirthName("birth-name");
-        entity.setBirthPlace("birth-place");
-        entity.setCareStatus(CareStatus.ACTIVE);
-        entity.setEmail("e-mail");
-        entity.setEndOfCare(now);
-        entity.setFirstName("first-name");
-        entity.setId(0);
-        entity.setInstitutionEntity(institutionEntity);
-        entity.setLastName("last-name");
-        entity.setMothersName("mothers-name");
-        entity.setPhoneNumber("phone-number");
-        entity.setSex(Sex.FERFI);
-        entity.setStartOfCare(now);
+    public void convert_FullData() {
+        final CareReceiverEntity entity = getCareReceiverEntity(now);
 
         final CareReceiverDetails result = careReceiverConverter.convert(entity);
 
-        assertThat(result.getAddress(), is("address"));
+        assertThat(result.getAddress(), is("test_address"));
         assertThat(result.getBirthDate(), is(now));
-        assertThat(result.getBirthName(), is("birth-name"));
-        assertThat(result.getBirthPlace(), is("birth-place"));
+        assertThat(result.getBirthName(), is("birth_name"));
+        assertThat(result.getBirthPlace(), is("birth_place"));
         assertThat(result.getCareStatus(), is(CareStatus.ACTIVE));
-        assertThat(result.getEmail(), is("e-mail"));
+        assertThat(result.getEmail(), is("e_mail"));
         assertThat(result.getEndOfCare(), is(now));
-        assertThat(result.getFirstName(), is("first-name"));
-        assertThat(result.getInstitutionName(), is("institution-name"));
-        assertThat(result.getLastName(), is("last-name"));
-        assertThat(result.getMothersName(), is("mothers-name"));
-        assertThat(result.getPhoneNumber(), is("phone-number"));
+        assertThat(result.getFirstName(), is("first_name"));
+        assertThat(result.getInstitutionName(), is("test_institution"));
+        assertThat(result.getLastName(), is("last_name"));
+        assertThat(result.getMothersName(), is("mothers_name"));
+        assertThat(result.getPhoneNumber(), is("phone_number"));
         assertThat(result.getSex(), is(Sex.FERFI));
         assertThat(result.getStartOfCare(), is(now));
+    }
+
+    @Test
+    public void convert_Null() {
+        final CareReceiverDetails result = careReceiverConverter.convert(null);
+
+        assertThat(result, nullValue());
     }
 }

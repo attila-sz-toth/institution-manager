@@ -10,6 +10,10 @@ public class NormativeConverter implements Converter<NormativeEntity, Normative>
 
     @Override
     public Normative convert(NormativeEntity normativeEntity) {
+        if (normativeEntity == null) {
+            return null;
+        }
+
         final Normative normative = new Normative();
         BeanUtils.copyProperties(normativeEntity, normative);
         return normative;

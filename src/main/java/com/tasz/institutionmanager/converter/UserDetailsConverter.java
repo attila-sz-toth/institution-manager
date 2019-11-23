@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 public class UserDetailsConverter implements Converter<UserEntity, UserDetails> {
     @Override
     public UserDetails convert(UserEntity userEntity) {
+        if (null == userEntity) {
+            return null;
+        }
+
         final UserDetails userDetails = new UserDetails();
         BeanUtils.copyProperties(userEntity, userDetails);
 
