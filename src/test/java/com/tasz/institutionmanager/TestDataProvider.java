@@ -113,4 +113,14 @@ public class TestDataProvider {
 
         return careReceiverEntity;
     }
+
+    public static NormativeEntity getNormativeEntity() {
+        final NormativeEntity normativeEntity = new NormativeEntity();
+        normativeEntity.setId(0);
+        normativeEntity.setYear("2020");
+        normativeEntity.setAmount(42);
+        normativeEntity.setInstitutionEntity(getInstitutionEntity());
+
+        return normativeEntity;
+    }
 }

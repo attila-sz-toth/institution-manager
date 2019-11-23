@@ -4,7 +4,7 @@ import com.tasz.institutionmanager.contract.Normative;
 import com.tasz.institutionmanager.model.NormativeEntity;
 import org.junit.Test;
 
-import static com.tasz.institutionmanager.TestDataProvider.getInstitutionEntity;
+import static com.tasz.institutionmanager.TestDataProvider.getNormativeEntity;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,11 +15,7 @@ public class NormativeConverterTest {
 
     @Test
     public void convert_FullData() {
-        final NormativeEntity normativeEntity = new NormativeEntity();
-        normativeEntity.setId(0);
-        normativeEntity.setYear("2020");
-        normativeEntity.setAmount(42);
-        normativeEntity.setInstitutionEntity(getInstitutionEntity());
+        final NormativeEntity normativeEntity = getNormativeEntity();
 
         final Normative normative = normativeConverter.convert(normativeEntity);
 
