@@ -11,7 +11,6 @@ import com.tasz.institutionmanager.model.NormativeEntity;
 import com.tasz.institutionmanager.repository.CareReceiverRepository;
 import com.tasz.institutionmanager.repository.InstitutionRepository;
 import com.tasz.institutionmanager.repository.NormativeRepository;
-import com.tasz.institutionmanager.serializer.DateSerializer;
 import com.tasz.institutionmanager.service.CareReceiverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
+import static com.tasz.institutionmanager.serializer.DateSerializer.DATE_FORMAT;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
@@ -44,6 +44,7 @@ public class CareReceiverServiceImpl implements CareReceiverService {
     private final NormativeRepository normativeRepository;
     private final CareReceiverConverter careReceiverConverter;
     private final CareReceiverEntityConverter careReceiverEntityConverter;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     @Override
     public Page<CareReceiverDetails> getCareReceivers(final Integer pageNumber) {
@@ -157,17 +158,17 @@ public class CareReceiverServiceImpl implements CareReceiverService {
     public Integer countCareReceiversByInstitutionInTimeRange(final String institutionName, final String fromDateString,
                                                               final String toDateString) throws ParseException {
         final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
-        final Date fromDate = DateSerializer.dateFormat.parse(fromDateString);
-        final Date toDate = DateSerializer.dateFormat.parse(toDateString);
+        final Date fromDate = dateFormat.parse(fromDateString);
+        final Date toDate = dateFormat.parse(toDateString);
 
         return careReceiverRepository.countCareReceiversByInstitutionInTimeRange(institutionEntity, fromDate, toDate);
     }
 
     @Override
     public Integer normativeByInstitutionAndYear(final String institutionName, final String year) throws ParseException {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        final Date fromDate = dateFormat.parse(year + "-01-01");
-        final Date toDate = dateFormat.parse(year + "-12-31");
+        final SimpleDateFormat normativeDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final Date fromDate = normativeDateFormat.parse(year + "-01-01");
+        final Date toDate = normativeDateFormat.parse(year + "-12-31");
 
         final InstitutionEntity institutionEntity = institutionRepository.findByName(institutionName);
         final NormativeEntity normativeEntity = normativeRepository.findByInstitutionEntityAndYear(institutionEntity, year);

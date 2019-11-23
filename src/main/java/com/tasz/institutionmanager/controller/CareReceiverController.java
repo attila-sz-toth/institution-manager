@@ -3,7 +3,6 @@ package com.tasz.institutionmanager.controller;
 import com.tasz.institutionmanager.constants.Sex;
 import com.tasz.institutionmanager.contract.CareReceiverDetails;
 import com.tasz.institutionmanager.contract.PersonalDetailsCompositeKey;
-import com.tasz.institutionmanager.serializer.DateSerializer;
 import com.tasz.institutionmanager.service.CareReceiverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.tasz.institutionmanager.serializer.DateSerializer.DATE_FORMAT;
 
 @Slf4j
 @AllArgsConstructor
@@ -26,6 +28,7 @@ import java.util.Map;
 public class CareReceiverController {
 
     private CareReceiverService careReceiverService;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     @GetMapping(value = "/get-all/{page-number}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<CareReceiverDetails> getCareReceivers(@PathVariable(name = "page-number") final Integer pageNumber) {
@@ -86,7 +89,7 @@ public class CareReceiverController {
         compositeKey.setFirstName(firstName);
         compositeKey.setLastName(lastName);
         compositeKey.setMothersName(mothersName);
-        compositeKey.setBirthDate(DateSerializer.dateFormat.parse(birthDate));
+        compositeKey.setBirthDate(dateFormat.parse(birthDate));
 
         log.info("Getting care receiver {}", compositeKey);
         return careReceiverService.getCareReceiver(compositeKey);
@@ -110,7 +113,7 @@ public class CareReceiverController {
         compositeKey.setFirstName(firstName);
         compositeKey.setLastName(lastName);
         compositeKey.setMothersName(mothersName);
-        compositeKey.setBirthDate(DateSerializer.dateFormat.parse(birthDate));
+        compositeKey.setBirthDate(dateFormat.parse(birthDate));
 
         log.info("Updating care receiver {}", careReceiverDetails);
         careReceiverService.updateCareReceiver(compositeKey, careReceiverDetails);
@@ -127,7 +130,7 @@ public class CareReceiverController {
         compositeKey.setFirstName(firstName);
         compositeKey.setLastName(lastName);
         compositeKey.setMothersName(mothersName);
-        compositeKey.setBirthDate(DateSerializer.dateFormat.parse(birthDate));
+        compositeKey.setBirthDate(dateFormat.parse(birthDate));
 
         log.info("Deleting care receiver {}", compositeKey);
         careReceiverService.deleteCareReceiver(compositeKey);

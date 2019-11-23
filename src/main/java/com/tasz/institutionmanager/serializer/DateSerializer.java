@@ -12,7 +12,8 @@ import java.util.Date;
 @Component
 public class DateSerializer extends JsonSerializer<Date> {
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. MM. dd.");
+    public static final String DATE_FORMAT = "yyyy. MM. dd.";
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     @Override
     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {

@@ -13,7 +13,7 @@ import java.util.Collections;
 @Slf4j
 @AllArgsConstructor
 public class MyUserPrincipal implements UserDetails {
-    private final UserEntity userEntity;
+    private final transient UserEntity userEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
